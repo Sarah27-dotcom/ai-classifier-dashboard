@@ -147,3 +147,55 @@ export async function fetchResults(): Promise<{
 
   return { results, lastClassified };
 }
+
+// ============================================================
+// Append data to any tab (Survey/Assessment)
+// ============================================================
+
+export async function appendSheetData(
+  tabName: string,
+  data: Record<string, string>
+): Promise<void> {
+  const sheets = await getSheetClient();
+
+  // 1. Get existing headers
+  const headerResponse = await sheets.spreadsheets.values.get({
+    spreadsheetId: SPREADSHEET_ID,
+    range: `${tabName}!1:1`,
+  });
+
+  let headers = (headerResponse.data.values?.[0] || []).map((h: string) =>
+    h.trim()
+  );
+
+  // 2. Check for new headers
+  const newKeys = Object.keys(data).filter((key) => !headers.includes(key));
+
+  if (newKeys.length > 0) {
+    // Add new headers to the end of the first row
+    const updatedHeaders = [...headers, ...newKeys];
+    await sheets.spreadsheets.values.update({
+      spreadsheetId: SPREADSHEET_ID,
+      range: `${tabName}!1:1`,
+      valueInputOption: "RAW",
+      requestBody: {
+        values: [updatedHeaders],
+      },
+    });
+    headers = updatedHeaders;
+  }
+
+  // 3. Prepare the row based on header order
+  const row = headers.map((header) => data[header] || "");
+
+  // 4. Append the row
+  await sheets.spreadsheets.values.append({
+    spreadsheetId: SPREADSHEET_ID,
+    range: `${tabName}!A1`,
+    valueInputOption: "RAW",
+    insertDataOption: "INSERT_ROWS",
+    requestBody: {
+      values: [row],
+    },
+  });
+}
