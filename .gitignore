@@ -40,8 +40,9 @@ yarn-error.log*
 *.tsbuildinfo
 next-env.d.ts
 
-# plan
+# plan & docs
 Master_Plan.md
+docs/
 
 # AI configs
 AGENTS.md
