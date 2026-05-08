@@ -1,8 +1,15 @@
 import { NextResponse } from "next/server";
 import { fetchResults } from "@/lib/google-sheets";
+import { verifySession } from "@/lib/session";
 import type { DashboardData } from "@/lib/types";
 
 export async function GET() {
+  // Check auth
+  const session = await verifySession();
+  if (!session) {
+    return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+  }
+
   try {
     const { results, lastClassified } = await fetchResults();
 

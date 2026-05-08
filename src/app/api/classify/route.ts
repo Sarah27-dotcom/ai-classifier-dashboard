@@ -2,9 +2,16 @@ import { NextResponse } from "next/server";
 import { fetchSheetData, writeResults } from "@/lib/google-sheets";
 import { mergeEmployeeData } from "@/lib/data-merger";
 import { classifyEmployees } from "@/lib/openai-classifier";
+import { verifySession } from "@/lib/session";
 import type { DashboardData } from "@/lib/types";
 
 export async function POST() {
+  // Check auth
+  const session = await verifySession();
+  if (!session) {
+    return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+  }
+
   try {
     // 1. Fetch from Survey + Assessment tabs
     const [surveyRows, assessmentRows] = await Promise.all([
