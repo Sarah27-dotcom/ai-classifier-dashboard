@@ -4,4 +4,46 @@
   --font-sans: var(--font-jakarta);
   --color-background: #f8fafc;
   --color-foreground: #0f172a;
+  --color-surface: #ffffff;
+  --color-surface-elevated: #ffffff;
+  --animate-fade-in: fadeIn 0.4s ease-out forwards;
+  --animate-float: float 3s ease-in-out infinite;
+  --color-maroon-50: #fdf5f3;
+  --color-maroon-100: #fbe8e3;
+  --color-maroon-200: #f5cfc6;
+  --color-maroon-300: #e9a394;
+  --color-maroon-400: #d4695a;
+  --color-maroon-500: #b83b2e;
+  --color-maroon-600: #8b2020;
+  --color-maroon-700: #6e1818;
+  --color-maroon-800: #521212;
+  --color-maroon-900: #3b0c0c;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(8px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes float {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-8px); }
+}
+
+@keyframes modalIn {
+  from {
+    opacity: 0;
+    transform: scale(0.95) translateY(8px);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1) translateY(0);
+  }
+}
+
+@keyframes bounceIn {
+  0% { transform: scale(0.3); opacity: 0; }
+  50% { transform: scale(1.08); }
+  70% { transform: scale(0.95); }
+  100% { transform: scale(1); opacity: 1; }
 }

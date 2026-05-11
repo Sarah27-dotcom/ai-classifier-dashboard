@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { Search } from "lucide-react";
+import { Search, ChevronRight } from "lucide-react";
 import type { ClassificationResult, ClassLevel } from "@/lib/types";
 
 interface EmployeeTableProps {
@@ -10,9 +10,9 @@ interface EmployeeTableProps {
 }
 
 const LEVEL_BADGE: Record<ClassLevel, string> = {
-  Beginner: "bg-red-100 text-red-700",
-  Intermediate: "bg-amber-100 text-amber-700",
-  Advanced: "bg-emerald-100 text-emerald-700",
+  Beginner: "bg-violet-50 text-violet-700",
+  Intermediate: "bg-sky-50 text-sky-700",
+  Advanced: "bg-emerald-50 text-emerald-700",
 };
 
 export default function EmployeeTable({
@@ -42,7 +42,7 @@ export default function EmployeeTable({
             placeholder="Search name, email, or department..."
             value={search}
             onChange={(e) => setSearch(e.target.value)}
-            className="w-full rounded-xl border border-slate-200 bg-slate-50 py-2 pl-10 pr-4 text-sm outline-none transition focus:border-indigo-300 focus:ring-2 focus:ring-indigo-100 sm:w-72"
+            className="w-full rounded-xl border border-slate-200 bg-slate-50 py-2 pl-10 pr-4 text-sm outline-none transition focus:border-maroon-300 focus:ring-2 focus:ring-maroon-100 sm:w-72"
           />
         </div>
         <div className="flex gap-1.5">
@@ -53,7 +53,7 @@ export default function EmployeeTable({
                 onClick={() => setFilterLevel(level)}
                 className={`rounded-xl px-3 py-1.5 text-xs font-medium transition ${
                   filterLevel === level
-                    ? "bg-indigo-600 text-white"
+                    ? "bg-maroon-600 text-white"
                     : "bg-slate-100 text-slate-600 hover:bg-slate-200"
                 }`}
               >
@@ -88,7 +88,7 @@ export default function EmployeeTable({
                 <tr
                   key={emp.email}
                   onClick={() => onSelectEmployee(emp)}
-                  className="cursor-pointer border-b border-slate-50 transition hover:bg-slate-50"
+                  className="group cursor-pointer border-b border-slate-50 transition hover:bg-maroon-50/40"
                 >
                   <td className="px-4 py-3">
                     <div>
@@ -109,6 +109,9 @@ export default function EmployeeTable({
                   </td>
                   <td className="hidden max-w-[200px] truncate px-4 py-3 text-slate-600 md:table-cell">
                     {emp.recommendedFocus}
+                  </td>
+                  <td className="w-8 px-2 py-3">
+                    <ChevronRight className="h-4 w-4 text-slate-300 transition-colors group-hover:text-maroon-400" />
                   </td>
                 </tr>
               ))

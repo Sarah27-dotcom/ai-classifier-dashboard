@@ -8,7 +8,7 @@ const jakartaSans = Plus_Jakarta_Sans({
 });
 
 export const metadata: Metadata = {
-  title: "AI Classifier Dashboard",
+  title: "AI Readiness Dashboard",
   description: "L&D AI Readiness Classifier Dashboard",
 };
 
