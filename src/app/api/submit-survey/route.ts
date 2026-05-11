@@ -4,8 +4,6 @@ import { z } from "zod";
 
 const surveySchema = z.object({
   Name: z.string().min(2, "Name is required"),
-  Email: z.string().email("Invalid email address"),
-  Department: z.string().min(2, "Department is required"),
 }).passthrough(); // Allow extra dynamic fields
 
 export async function POST(request: Request) {
