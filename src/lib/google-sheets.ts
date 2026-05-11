@@ -118,34 +118,42 @@ export async function fetchResults(): Promise<{
   results: ClassificationResult[];
   lastClassified: string | null;
 }> {
-  const sheets = await getSheetClient();
+  try {
+    const sheets = await getSheetClient();
 
-  const response = await sheets.spreadsheets.values.get({
-    spreadsheetId: SPREADSHEET_ID,
-    range: "Results",
-  });
+    const response = await sheets.spreadsheets.values.get({
+      spreadsheetId: SPREADSHEET_ID,
+      range: "Results",
+    });
 
-  const rows = response.data.values;
-  if (!rows || rows.length < 2) {
-    return { results: [], lastClassified: null };
+    const rows = response.data.values;
+    if (!rows || rows.length < 2) {
+      return { results: [], lastClassified: null };
+    }
+
+    // Skip header row
+    const results: ClassificationResult[] = rows.slice(1).map((row: string[]) => ({
+      name: row[0] || "",
+      email: row[1] || "",
+      department: row[2] || "",
+      level: (row[3] as ClassificationResult["level"]) || "Beginner",
+      keyStrength: row[4] || "",
+      recommendedFocus: row[5] || "",
+      rationale: row[6] || "",
+      confidence: parseFloat(row[7]) || 0,
+    }));
+
+    // Last classified timestamp is in the last column of the first data row
+    const lastClassified = rows[1]?.[8] || null;
+
+    return { results, lastClassified };
+  } catch (error: any) {
+    if (error?.code === 404) {
+      console.warn("Results tab not found in spreadsheet — returning empty results.");
+      return { results: [], lastClassified: null };
+    }
+    throw error;
   }
-
-  // Skip header row
-  const results: ClassificationResult[] = rows.slice(1).map((row: string[]) => ({
-    name: row[0] || "",
-    email: row[1] || "",
-    department: row[2] || "",
-    level: (row[3] as ClassificationResult["level"]) || "Beginner",
-    keyStrength: row[4] || "",
-    recommendedFocus: row[5] || "",
-    rationale: row[6] || "",
-    confidence: parseFloat(row[7]) || 0,
-  }));
-
-  // Last classified timestamp is in the last column of the first data row
-  const lastClassified = rows[1]?.[8] || null;
-
-  return { results, lastClassified };
 }
 
 // ============================================================
